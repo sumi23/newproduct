@@ -1,10 +1,10 @@
 package java;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,33 +33,31 @@ public class Servletdemo extends HttpServlet {
        out.println("</head>");
        out.println("<body>");
        out.println("<h1>Servlet insert at " + request.getContextPath() + "</h1>");
-        String username=(String)session.getAttribute("username");
-        out.println("<center><h2>"+"HELLO "+username+"!</h2></center>");
-   if(username==null){
-   	response.sendRedirect("index.html");
-   }
-     String id=request.getParameter("id");    
-     String name=request.getParameter("name");
-     String price=request.getParameter("price");
-     String availability=request.getParameter("availability");
-     String quantity=request.getParameter("quantity");
    try
    {
   Class.forName("com.mysql.jdbc.Driver");
-  String url="jdbc:mysql://127.0.0.1:3306/productdb";
+  String url="jdbc:mysql://127.0.0.1:3306/moviedb";
   String uname="root";
   String password="root";
-  String query="insert into productdetails(product_id,name,price,availability,quantity) values('"+id+"','"+name+"','"+price+"','"+availability+"','"+quantity+"')";
+  String query="select * from movies";
   Connection conn=DriverManager.getConnection(url, uname, password);
   Statement stmt=conn.createStatement();
   int result=stmt.executeUpdate(query);
-  
-out.println(result);
+  while(rs.next())
+  {
+out.write("<table>");
+out.write("\n");
+out.write("          <br /><br />  \n");
+out.write("       <tr><td>");
+out.println(rs.getInt("id")); 
+out.write("</td>\n");
+out.write("       <td>");
+out.println(rs.getString("name")); 
+out.write("</td>\n");
+out.write("       </table>\n");
+out.write("       ");
 
-if(result>=0)
-  out.println("Data is successfully inserted!");
-else
-  out.println(" insertion failed!");
+  }
 }    
 catch(Exception e)
 {
